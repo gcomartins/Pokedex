@@ -16,6 +16,7 @@ class PokemonRepository implements IPokemonRepository {
   PokemonRepository({
     required this.dio,
   });
+
   @override
   Future<List<Pokemon>> getAllPokemons() async {
     try {
