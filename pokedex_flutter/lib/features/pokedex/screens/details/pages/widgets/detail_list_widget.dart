@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex_flutter/features/pokedex/screens/details/pages/widgets/detail_item_list_widget.dart';
 
 import '../../../../../../common/models/pokemon.dart';
 
@@ -17,15 +18,10 @@ class DetailListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      height: 350,
-      top: 80,
-      left: 0,
-      right: 0,
+    return SliverToBoxAdapter(
       child: Container(
         color: pokemon.baseColor,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.all(24),
@@ -56,35 +52,16 @@ class DetailListWidget extends StatelessWidget {
             ),
             SizedBox(
               width: double.infinity,
-              height: 250,
+              height: 300,
               child: PageView(
                 onPageChanged: (index) => onChangePokemon(list[index]),
                 controller: controller,
-                children: list.map((e) {
-                  bool diff = e.name != pokemon.name;
-                  return AnimatedOpacity(
-                    duration: const Duration(milliseconds: 200),
-                    opacity: diff ? 0.4 : 1.0,
-                    child: TweenAnimationBuilder<double>(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.bounceInOut,
-                      tween: Tween<double>(
-                        end: diff ? 70 : 400,
-                        begin: diff ? 400 : 70,
-                      ),
-                      builder: (context, value, child) {
-                        return Center(
-                          child: Image.network(
-                            e.image,
-                            height: value,
-                            fit: BoxFit.fitWidth,
-                            color: diff ? Colors.black.withOpacity(0.2) : null,
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }).toList(),
+                children: list.map(
+                  (e) {
+                    bool diff = e.name != pokemon.name;
+                    return DetailItemListWidget(isDiff: diff, pokemon: e);
+                  },
+                ).toList(),
               ),
             )
           ],
